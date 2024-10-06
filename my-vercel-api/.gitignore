@@ -1,0 +1,29 @@
+.vercel
+# Node modules
+node_modules/
+
+# Log files
+logs/
+*.log
+
+# Environment variable files
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Build output
+dist/
+build/
+
+# Vercel configuration
+.vercel/
+
+# IDE specific files
+.vscode/
+.idea/
+
+# OS generated files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chair 2</title>
+    <link rel="stylesheet" href="style.css"> <!-- Link to your CSS -->
+    <style>
+        /* Inline styles for clarity; you can move this to your CSS file */
+        #menuContainer div {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .total {
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Chair 2 - Menu</h1>
+    </header>
+    <form id="orderForm">
+        <div id="menuContainer"></div>
+        <button type="submit">Place Order</button>
+        <div class="total" id="totalContainer">Total: ₹0 | Items: 0</div>
+    </form>
+    <button id="clearOrdersButton">Clear All Orders</button> <!-- Button to clear orders -->
+    <div id="responseMessage"></div>
+
+    <script src="app.js"></script> <!-- Link to your JS -->
+    <script>
+        // Updated Menu Items Data
+        const menuItems = [
+            { id: 1, name: "Biryani", price: 100 },
+            { id: 2, name: "Parota", price: 10 },
+            { id: 3, name: "Tomato Rice", price: 50 },
+            { id: 4, name: "Café", price: 12 },
+            { id: 5, name: "Tea", price: 10 },
+            { id: 6, name: "Juice", price: 15 },
+            { id: 7, name: "Ice Cream", price: 20 }
+        ];
+
+        // Function to display menu items
+        function displayMenu() {
+            const menuContainer = document.getElementById('menuContainer');
+            menuItems.forEach(item => {
+                const itemDiv = document.createElement('div');
+                itemDiv.innerHTML = `
+                    <input type="checkbox" id="item-${item.id}" value="${item.name}" data-price="${item.price}">
+                    <label for="item-${item.id}">${item.name} - ₹${item.price.toFixed(2)}</label>
+                    <input type="number" id="quantity-${item.id}" min="0" value="0" style="width: 50px; margin-left: 10px;" placeholder="Qty">
+                `;
+                menuContainer.appendChild(itemDiv);
+            });
+        }
+
+        // Calculate total amount and item count
+        function calculateTotal() {
+            let totalAmount = 0;
+            let itemCount = 0;
+
+            menuItems.forEach(item => {
+                const checkbox = document.getElementById(`item-${item.id}`);
+                const quantityInput = document.getElementById(`quantity-${item.id}`);
+                const quantity = parseInt(quantityInput.value) || 0;
+
+                if (checkbox.checked && quantity > 0) {
+                    totalAmount += item.price * quantity;
+                    itemCount += quantity;
+                }
+            });
+
+            document.getElementById('totalContainer').textContent = `Total: ₹${totalAmount.toFixed(2)} | Items: ${itemCount}`;
+        }
+
+        // Update total on checkbox change and quantity input change
+        document.addEventListener('change', calculateTotal);
+
+        // Call the display function
+        displayMenu();
+
+        // Modify form submission to include selected items and quantities
+        document.getElementById('orderForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission
+
+            const selectedItems = [];
+            menuItems.forEach(item => {
+                const checkbox = document.getElementById(`item-${item.id}`);
+                const quantityInput = document.getElementById(`quantity-${item.id}`);
+                const quantity = parseInt(quantityInput.value) || 0;
+
+                if (checkbox.checked && quantity > 0) {
+                    selectedItems.push(`${item.name} (Qty: ${quantity})`);
+                }
+            });
+
+            const chair = 2; // For chair 2
+
+            // Make a POST request to the server to place the order
+            fetch('https://kpmrestaurant.vercel.app/api/order', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ chair, order: selectedItems.join(', ') }) // Remove totalAmount from here
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const responseMessage = document.getElementById('responseMessage');
+                responseMessage.textContent = data.message;
+                document.getElementById('orderForm').reset(); // Clear input after submission
+                calculateTotal(); // Reset total
+            })
+            .catch(error => {
+                console.error('Error placing order:', error);
+                const responseMessage = document.getElementById('responseMessage');
+                responseMessage.textContent = 'Error placing order: ' + error.message;
+            });
+        });
+
+        // Clear all orders when button is clicked
+        document.getElementById('clearOrdersButton').addEventListener('click', function() {
+            fetch('https://kpmrestaurant.vercel.app/api/clear-orders', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const responseMessage = document.getElementById('responseMessage');
+                responseMessage.textContent = data.message; // Show success message
+                calculateTotal(); // Reset total if needed
+            })
+            .catch(error => {
+                console.error('Error clearing orders:', error);
+                const responseMessage = document.getElementById('responseMessage');
+                responseMessage.textContent = 'Error clearing orders: ' + error.message;
+            });
+        });
+    </script>
+</body>
+</html>

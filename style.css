@@ -1,0 +1,119 @@
+body {
+    font-family: 'Open Sans', sans-serif; /* Updated font */
+    background-color: #f8f9fa; /* Light gray background */
+    margin: 0; /* Remove default margin */
+    padding: 20px; /* Add padding for layout */
+}
+
+header {
+    text-align: center; /* Center header text */
+    padding: 20px; /* Add padding around header */
+    background-color: #007BFF; /* Header background color */
+    color: white; /* Header text color */
+    border-radius: 10px; /* Rounded corners for header */
+}
+
+nav {
+    margin: 20px 0; /* Spacing for navigation */
+    text-align: center; /* Center navigation items */
+}
+
+nav ul {
+    list-style: none; /* Remove default list styling */
+    padding: 0; /* Remove padding */
+}
+
+nav ul li {
+    display: inline; /* Display items inline */
+    margin: 0 15px; /* Spacing between items */
+}
+
+nav ul li a {
+    text-decoration: none; /* Remove underline */
+    color: #007BFF; /* Link color */
+    font-weight: bold; /* Bold links */
+}
+
+nav ul li a:hover {
+    text-decoration: underline; /* Underline on hover */
+}
+
+h1 {
+    color: #333; /* Heading color */
+    margin-bottom: 20px; /* Space below heading */
+}
+
+form {
+    margin-bottom: 20px; /* Space below form */
+    display: flex; /* Flex layout for form */
+    flex-direction: column; /* Stack form elements */
+    align-items: center; /* Center form elements */
+}
+
+label {
+    margin-bottom: 5px; /* Space below label */
+}
+
+input {
+    padding: 10px; /* Padding inside input */
+    margin-bottom: 10px; /* Space below input */
+    width: 100%; /* Full width */
+    max-width: 400px; /* Max width for inputs */
+    border: 1px solid #ccc; /* Input border */
+    border-radius: 5px; /* Rounded corners */
+    transition: border-color 0.3s; /* Transition effect */
+}
+
+input:focus {
+    border-color: #007BFF; /* Highlight border on focus */
+    outline: none; /* Remove outline */
+}
+
+button {
+    padding: 10px 15px; /* Button padding */
+    background-color: #28a745; /* Green button color */
+    color: white; /* Button text color */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor */
+    transition: background-color 0.3s, transform 0.2s; /* Transition effects */
+}
+
+button:hover {
+    background-color: #218838; /* Darker green on hover */
+    transform: translateY(-2px); /* Lift effect on hover */
+}
+
+#responseMessage {
+    margin-top: 20px; /* Space above response message */
+    font-weight: bold; /* Bold text */
+    padding: 10px; /* Padding around message */
+    border-radius: 5px; /* Rounded corners */
+}
+
+/* Styles for order containers */
+#ordersContainer {
+    margin-top: 20px; /* Space above orders container */
+    padding: 15px; /* Padding inside orders container */
+    background-color: white; /* White background for orders */
+    border-radius: 5px; /* Rounded corners */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+/* Order items */
+#ordersContainer div {
+    padding: 10px; /* Padding for each order item */
+    border-bottom: 1px solid #ddd; /* Divider for orders */
+}
+
+#ordersContainer div:last-child {
+    border-bottom: none; /* No border for the last item */
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    nav ul li {
+        display: block; /* Stack links vertically on small screens */
+        margin: 5px 0; /* Space between stacked items */
+    }
+}

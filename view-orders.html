@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Orders</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Orders</h1>
+    <button id="loadOrders">Load Orders</button>
+    <div id="ordersContainer"></div>
+
+    <script>
+        document.getElementById('loadOrders').addEventListener('click', function() {
+            fetch('https://kpmrestaurant.vercel.app/api/orders')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const ordersContainer = document.getElementById('ordersContainer');
+                    ordersContainer.innerHTML = ''; // Clear previous orders
+
+                    if (data.length === 0) {
+                        ordersContainer.innerHTML = '<p>No orders placed yet.</p>';
+                        return;
+                    }
+
+                    // Show new orders at the top
+                    data.sort((a, b) => new Date(b.time) - new Date(a.time));
+
+                    data.forEach(order => {
+                        const orderDiv = document.createElement('div');
+                        orderDiv.innerHTML = `
+                            <p>Chair: ${order.chair}</p>
+                            <p>Order: ${order.order}</p>
+                            <p>Total Amount: ₹${order.totalAmount}</p>
+                            <p>Order Time: ${new Date(order.time).toLocaleString()}</p>
+                            <p>Status: ${order.status}</p>
+                            ${order.status === 'Pending' ? `<button class="completeOrder" data-chair="${order.chair}">Complete Order</button>` : ''}
+                            <hr>
+                        `;
+                        ordersContainer.appendChild(orderDiv);
+                    });
+
+                    // Add event listeners to the complete buttons
+                    document.querySelectorAll('.completeOrder').forEach(button => {
+                        button.addEventListener('click', function() {
+                            const chair = this.getAttribute('data-chair');
+                            completeOrder(chair);
+                        });
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching orders:', error);
+                    alert('Error fetching orders: ' + error.message);
+                });
+        });
+
+        function completeOrder(chair) {
+            if (confirm(`Are you sure you want to complete the order from chair ${chair}?`)) {
+                fetch(`https://kpmrestaurant.vercel.app/api/finish-order/${chair}`, {
+                    method: 'POST'
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    alert(data.message);
+                    document.getElementById('loadOrders').click(); // Reload orders
+                })
+                .catch(error => {
+                    console.error('Error completing order:', error);
+                    alert('Error completing order: ' + error.message);
+                });
+            }
+        }
+    </script>
+</body>
+</html>

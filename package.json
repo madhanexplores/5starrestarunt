@@ -1,0 +1,17 @@
+{
+  "name": "food-ordering-system",
+  "version": "1.0.0",
+  "description": "A food ordering system for restaurant chairs.",
+  "main": "serververce.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}
+ 
