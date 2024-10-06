@@ -86,6 +86,8 @@
             event.preventDefault(); // Prevent form submission
 
             const selectedItems = [];
+            let orderValid = false; // To check if any item is selected
+
             menuItems.forEach(item => {
                 const checkbox = document.getElementById(`item-${item.id}`);
                 const quantityInput = document.getElementById(`quantity-${item.id}`);
@@ -93,13 +95,19 @@
 
                 if (checkbox.checked && quantity > 0) {
                     selectedItems.push(`${item.name} (Qty: ${quantity})`);
+                    orderValid = true; // At least one item is selected
                 }
             });
+
+            if (!orderValid) {
+                alert('Please select at least one item to place an order.');
+                return; // Prevent order submission if no items are selected
+            }
 
             const chair = 2; // For chair 2
 
             // Make a POST request to the server to place the order
-            fetch('https://kpmrestaurant.vercel.app/api/order', {
+            fetch('https://5starrestarunt.vercel.app/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -127,28 +135,30 @@
 
         // Clear all orders when button is clicked
         document.getElementById('clearOrdersButton').addEventListener('click', function() {
-            fetch('https://kpmrestaurant.vercel.app/api/clear-orders', {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                const responseMessage = document.getElementById('responseMessage');
-                responseMessage.textContent = data.message; // Show success message
-                calculateTotal(); // Reset total if needed
-            })
-            .catch(error => {
-                console.error('Error clearing orders:', error);
-                const responseMessage = document.getElementById('responseMessage');
-                responseMessage.textContent = 'Error clearing orders: ' + error.message;
-            });
+            if (confirm('Are you sure you want to clear all orders?')) { // Confirmation before clearing
+                fetch('https://5starrestarunt.vercel.app/', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const responseMessage = document.getElementById('responseMessage');
+                    responseMessage.textContent = data.message; // Show success message
+                    calculateTotal(); // Reset total if needed
+                })
+                .catch(error => {
+                    console.error('Error clearing orders:', error);
+                    const responseMessage = document.getElementById('responseMessage');
+                    responseMessage.textContent = 'Error clearing orders: ' + error.message;
+                });
+            }
         });
     </script>
 </body>
