@@ -2,7 +2,7 @@
   "name": "food-ordering-system",
   "version": "1.0.0",
   "description": "A food ordering system for restaurant chairs.",
-  "main": "serververce.js",
+  "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },

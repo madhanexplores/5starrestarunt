@@ -13,7 +13,7 @@
 
     <script>
         document.getElementById('loadOrders').addEventListener('click', function() {
-            fetch('https://kpmrestaurant.vercel.app/api/orders')
+            fetch('https://5starrestarunt.vercel.app/')
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
@@ -62,7 +62,7 @@
 
         function completeOrder(chair) {
             if (confirm(`Are you sure you want to complete the order from chair ${chair}?`)) {
-                fetch(`https://kpmrestaurant.vercel.app/api/finish-order/${chair}`, {
+                fetch(`https://5starrestarunt.vercel.app/${chair}`, {
                     method: 'POST'
                 })
                 .then(response => {

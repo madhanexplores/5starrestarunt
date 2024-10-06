@@ -6,7 +6,7 @@ const port = process.env.PORT || 3000; // Use environment variable for port or d
 
 // Enable CORS for all origins
 app.use(cors({
-    origin: 'https://kpmrestaurant.vercel.app' // Allow requests from your Vercel domain
+    origin: 'https://5starrestarunt.vercel.app' // Allow requests from your Vercel domain
 }));
 
 // Middleware to parse JSON data
@@ -95,5 +95,5 @@ app.delete('/api/clear-orders', (req, res) => {
 
 // Start the server
 app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`); // Log server URL
+    console.log(`Server running at https://5starrestarunt.vercel.app/`); // Log server URL
 });
